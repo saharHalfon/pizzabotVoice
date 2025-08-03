@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu store="Pizza Shemesh – אשקלון">
+  <category name="פיצות">
+    <item id="pizza_family">
+      <name>פיצה משפחתית</name>
+      <price>25</price>
+	   <extras>
+        <extra name="גבינה צהובה" price="8"/>
+        <extra name="בולגרית" price="8"/>
+        <extra name="זיתים ירוקים" price="8"/>
+        <extra name="זיתים שחורים" price="8"/>
+        <extra name="עגבניות" price="8"/>
+        <extra name="בצל" price="8"/>
+        <extra name="פטריות" price="8"/>
+        <extra name="תירס" price="8"/>
+        <extra name="פלפל חריף" price="8"/>
+        <extra name="טונה" price="8"/>
+        <extra name="חציל" price="10"/>
+        <extra name="אננס" price="10"/>
+        <extra name="בטטה" price="10"/>
+        <extra name="פטריות טריות" price="10"/>
+      </extras>
+      <sauces>
+        <sauce name="רוטב הבית" price="2"/>
+        <sauce name="אלף האיים" price="2"/>
+        <sauce name="חריף" price="2"/>
+        <sauce name="שום" price="2"/>
+      </sauces>
+    </item>
+	<item id="pizza_sauces">
+      <name>תוספות</name>
+      <price>2</price>
+      <extras>
+		<extra name="רוטב הבית" price="2"/>
+        <extra name="אלף האיים" price="2"/>
+        <extra name="חריף" price="2"/>
+        <extra name="שום" price="2"/>
+      </extras>
+    </item>
+    <item id="pizza_greek">
+      <name>פיצה יוונית</name>
+      <price>40</price>
+      <extras>
+        <extra name="תוספת רגילה" price="8"/>
+        <extra name="תוספת ספיישל" price="8"/>
+      </extras>
+    </item>
+    <item id="pizza_spicy">
+      <name>פיצה חריפה</name>
+      <price>40</price>
+      <extras>
+        <extra name="תוספת רגילה" price="8"/>
+        <extra name="תוספת ספיישל" price="8"/>
+      </extras>
+    </item>
+    <item id="pizza_vegan">
+      <name>פיצה טבעונית</name>
+      <price>37</price>
+      <extras>
+        <extra name="תוספת רגילה" price="8"/>
+      </extras>
+    </item>
+    <item id="pizza_alfredo">
+      <name>פיצה אלפרדו</name>
+      <price>37</price>
+      <extras>
+        <extra name="תוספת רגילה" price="8"/>
+      </extras>
+    </item>
+    <item id="pizza_glutenfree">
+      <name>פיצה ללא גלוטן (אישי)</name>
+      <price>37</price>
+      <extras>
+        <extra name="תוספת רגילה" price="8"/>
+      </extras>
+    </item>
+    <item id="pizza_personal">
+      <name>פיצה אישית</name>
+      <price>20</price>
+      <extras>
+        <extra name="תוספת בסיסית" price="6"/>
+      </extras>
+    </item>
+    <item id="pizza_special_pro">
+      <name>פיצה פרו (עדשים, אישי)</name>
+      <price>40</price>
+      <extras>
+        <extra name="תוספת" price="5"/>
+      </extras>
+    </item>
+    <item id="dessert_pizza_chocolate">
+      <name>פיצה שוקולד</name>
+      <price>27</price>
+    </item>
+    <item id="pizza_blank_dough">
+      <name>כדור בצק להכנת פיצה</name>
+      <price>10</price>
+    </item>
+  </category>
+
+  <category name="מאפים">
+    <item id="garlic_bread_family">
+      <name>לחם שום משפחתי</name>
+      <price>30</price>
+    </item>
+    <item id="malawach_roll">
+      <name>מלאווח מגולגל + תוספת + טחינה + רסק + ביצה</name>
+      <price>35</price>
+    </item>
+    <item id="malawach_open">
+      <name>מלאווח פתוח + טחינה + רסק + ביצה</name>
+      <price>24</price>
+    </item>
+    <item id="ziwa">
+      <name>זיווה + רסק</name>
+      <price>27</price>
+    </item>
+  </category>
+
+  <category name="פסטות">
+    <item id="pasta_penne">
+      <name>פסטה פנה / פטוצ'יני</name>
+      <price>43</price>
+      <extras>
+        <extra name="הקרמה" price="8"/>
+      </extras>
+    </item>
+    <item id="pasta_ravioli">
+      <name>רביולי בטטה / 4 גבינות</name>
+      <price>47</price>
+      <extras>
+        <extra name="הקרמה" price="8"/>
+      </extras>
+    </item>
+  </category>
+
+  <category name="סלטים">
+    <item id="salad_tuna">
+      <name>סלט טונה</name>
+      <price>39</price>
+    </item>
+    <item id="salad_greek">
+      <name>סלט יווני</name>
+      <price>38</price>
+    </item>
+    <item id="salad_israeli">
+      <name>סלט ישראלי</name>
+      <price>38</price>
+    </item>
+  </category>
+
+  <category name="שתייה">
+    <item id="drink_tropit">
+      <name>שתייה טרופית</name>
+      <price>3</price>
+    </item>
+    <item id="drink_cola_can">
+      <name>קוקה קולה פחית</name>
+      <price>9</price>
+    </item>
+    <item id="drink_cola_zero_can">
+      <name>קוקה קולה זירו פחית</name>
+      <price>9</price>
+    </item>
+    <item id="drink_sprite_can">
+      <name>ספרייט פחית</name>
+      <price>9</price>
+    </item>
+    <item id="drink_sprite_zero_can">
+      <name>ספרייט זירו פחית</name>
+      <price>9</price>
+    </item>
+    <item id="drink_fanta_can">
+      <name>פאנטה פחית</name>
+      <price>9</price>
+    </item>
+    <item id="drink_prigat_bottle">
+      <name>פריגת ענבים (בקבוק קטן)</name>
+      <price>10</price>
+    </item>
+    <item id="drink_fuze_tea_bottle">
+      <name>פיוז טי (בקבוק קטן)</name>
+      <price>10</price>
+    </item>
+    <item id="drink_water_flavored">
+      <name>מים בטעם (ענבים או אפרסק, קטן)</name>
+      <price>10</price>
+    </item>
+    <item id="drink_cola_big">
+      <name>קוקה קולה 1.5 ל'</name>
+      <price>14</price>
+    </item>
+    <item id="drink_cola_zero_big">
+      <name>קוקה קולה זירו 1.5 ל'</name>
+      <price>14</price>
+    </item>
+    <item id="drink_sprite_big">
+      <name>ספרייט 1.5 ל'</name>
+      <price>14</price>
+    </item>
+    <item id="drink_sprite_zero_big">
+      <name>ספרייט זירו 1.5 ל'</name>
+      <price>14</price>
+    </item>
+    <item id="drink_fuze_tea_big">
+      <name>פיוז טי 1.5 ל'</name>
+      <price>14</price>
+    </item>
+    <item id="drink_prigat_big">
+      <name>פריגת ענבים 1.5 ל'</name>
+      <price>14</price>
+    </item>
+    <item id="drink_water_small">
+      <name>מים מינרליים קטן</name>
+      <price>8</price>
+    </item>
+    <item id="drink_soda_small">
+      <name>סודה בקבוק קטן</name>
+      <price>8</price>
+    </item>
+  </category>
+</menu>
