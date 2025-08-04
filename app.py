@@ -60,8 +60,15 @@ def ask_gpt(user_input):
         conversation_history.clear()
 
     if not conversation_history:
-        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. אתה פותח את השיחה במשפט 'שלום, הגעת לפיצה שמש – איך אפשר לעזור לך?' וממתין ללקוח. אל תציע מהתפריט מיוזמתך – תמיד רק לפי מה שהלקוח אומר. אתה שואל שלב־שלב: מה סוג הפיצה, איזה תוספות, כמות, שתייה או פסטה אם רלוונטי, ואז מסכם הכל כולל מחיר. אם המשתמש אומר 'פיצה חצי חצי עם זיתים וגבינה' – אתה מבין שמדובר על פיצה אחת, חצי זיתים חצי גבינה. אם הוא אומר '2 משפחתיות' – אתה מבין שמדובר על 2 פיצות נפרדות ושואל כל אחת בנפרד. אם המשתמש שותק – אתה מחכה ולא יוזם בעצמך. הימנע ממשפטים כמו 'יש לך כבר הזמנה'. אל תנסה לחסוך במילים – תתנהג כשירות אנושי מקצועי מלא. התפריט המלא הוא:\n" + menu_text})
-        conversation_history.append({"role": "assistant", "content": "שלום, הגעת לפיצה שמש – איך אפשר לעזור לך?"})
+        conversation_history.append({"role": "system", "content": (
+            "אתה נציג שירות של פיצה שמש. תפקד כמו אדם אמיתי: תשאל אם ההזמנה לאיסוף או משלוח, תבקש את פרטי ההזמנה (סוג פיצה, תוספות), לאחר מכן שם הלקוח וכתובת אם זה משלוח. "
+            "אסור לך להמציא מידע שלא נאמר. אסור לך לשאול שאלות כלליות. תחזור על ההזמנה בסוף ותבקש אישור. אין צורך להציע מוצרים שלא התבקשו. "
+            "הנחיות ברורות: אם שאלה מתאימה לטריגר מוגדר – הפעל את הפעולה מיד. אם לא – אמור שנציג יחזור אליהם והמשך באיסוף פרטי הזמנה בלבד. "
+            "אסור לך לנחש, להכליל או להוסיף מידע. תמיד תשיב רק על סמך הנתונים שנאמרו. אם יש שתיקה – גם אתה שותק."
+            "הלקוח שואל: אתה עונה במדויק. לא מוסיף, לא מרחיב. אם שואלים כמה זמן הפיצה – תגיד 30 דקות. "
+            "התפריט המלא:\n" + menu_text
+        )})
+        conversation_history.append({"role": "assistant", "content": "שלום, הגעת לפיצה שמש – זה לאיסוף או משלוח?"})
 
     conversation_history.append({"role": "user", "content": user_input})
     chat_completion = client_gpt.chat.completions.create(
@@ -86,7 +93,7 @@ def synthesize_speech(text):
     input_text = texttospeech.SynthesisInput(text=text)
     voice = texttospeech.VoiceSelectionParams(
         language_code="he-IL",
-        name="he-IL-Standard-A"
+        name="he-IL-Wavenet-A"
     )
     audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.MP3)
     response = client.synthesize_speech(input=input_text, voice=voice, audio_config=audio_config)
@@ -97,8 +104,8 @@ def synthesize_speech(text):
 def voice():
     user_input = request.form.get("SpeechResult")
 
-    if user_input:
-        gpt_reply = ask_gpt(user_input)
+    if user_input and user_input.strip():
+        gpt_reply = ask_gpt(user_input.strip())
         synthesize_speech(gpt_reply)
     else:
         gpt_reply = ask_gpt("התחלה")
@@ -109,7 +116,7 @@ def voice():
         input="speech",
         action="/voice",
         method="POST",
-        timeout=6,
+        timeout=12,
         speech_timeout="auto"
     )
     gather.play("https://pizzabotvoice.onrender.com/static/reply.mp3")
