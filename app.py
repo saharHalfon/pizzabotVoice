@@ -9,21 +9,17 @@ from dotenv import load_dotenv
 import xml.etree.ElementTree as ET
 import datetime
 
-# טען את משתני הסביבה מהקובץ .env
 load_dotenv()
 
-# הגדרת מפתחות מהסביבה
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_ORG_ID = os.getenv("OPENAI_ORG_ID")
 OPENAI_PROJECT_ID = os.getenv("OPENAI_PROJECT_ID")
 GOOGLE_CREDS_JSON = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
 
-# טען האישורים מהמשתנה
 google_creds_dict = json.loads(GOOGLE_CREDS_JSON)
 credentials = service_account.Credentials.from_service_account_info(google_creds_dict)
 client = texttospeech.TextToSpeechClient(credentials=credentials)
 
-# הגדרת OpenAI client לפי גרסה 1+
 client_gpt = OpenAI(
     api_key=OPENAI_API_KEY,
     organization=OPENAI_ORG_ID,
@@ -32,10 +28,8 @@ client_gpt = OpenAI(
 
 app = Flask(__name__)
 
-# אחסון מצב שיחה לפי session ID (לשימוש עתידי)
 user_states = {}
 
-# תפריט
 menu_text = ""
 def parse_menu():
     global menu_text
@@ -58,7 +52,6 @@ def parse_menu():
 
 parse_menu()
 
-# שיחה עם GPT
 conversation_history = []
 order_summary = ""
 def ask_gpt(user_input):
@@ -67,7 +60,7 @@ def ask_gpt(user_input):
         conversation_history.clear()
 
     if not conversation_history:
-        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. אתה פותח את השיחה במשפט 'שלום, הגעת לפיצה שמש – איך אפשר לעזור לך?' וממתין ללקוח. אל תציע מהתפריט מיוזמתך – תמיד רק לפי מה שהלקוח אומר. אתה שואל שלב־שלב: מה סוג הפיצה, איזה תוספות, כמות, שתייה או פסטה אם רלוונטי, ואז מסכם הכל כולל מחיר. אם המשתמש אומר 'פיצה חצי חצי עם זיתים וגבינה' – אתה מבין שמדובר על פיצה אחת, חצי זיתים חצי גבינה. אם הוא אומר '2 משפחתיות' – אתה מבין שמדובר על 2 פיצות נפרדות ושואל כל אחת בנפרד. אם המשתמש שותק – אתה מחכה ולא יוזם בעצמך. התפריט המלא הוא:\n" + menu_text})
+        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. אתה פותח את השיחה במשפט 'שלום, הגעת לפיצה שמש – איך אפשר לעזור לך?' וממתין ללקוח. אל תציע מהתפריט מיוזמתך – תמיד רק לפי מה שהלקוח אומר. אתה שואל שלב־שלב: מה סוג הפיצה, איזה תוספות, כמות, שתייה או פסטה אם רלוונטי, ואז מסכם הכל כולל מחיר. אם המשתמש אומר 'פיצה חצי חצי עם זיתים וגבינה' – אתה מבין שמדובר על פיצה אחת, חצי זיתים חצי גבינה. אם הוא אומר '2 משפחתיות' – אתה מבין שמדובר על 2 פיצות נפרדות ושואל כל אחת בנפרד. אם המשתמש שותק – אתה מחכה ולא יוזם בעצמך. הימנע ממשפטים כמו 'יש לך כבר הזמנה'. אל תנסה לחסוך במילים – תתנהג כשירות אנושי מקצועי מלא. התפריט המלא הוא:\n" + menu_text})
         conversation_history.append({"role": "assistant", "content": "שלום, הגעת לפיצה שמש – איך אפשר לעזור לך?"})
 
     conversation_history.append({"role": "user", "content": user_input})
@@ -89,7 +82,6 @@ def save_order_summary(summary):
     with open(f"orders/order_{now}.txt", "w", encoding="utf-8") as f:
         f.write(summary)
 
-# דיבור
 def synthesize_speech(text):
     input_text = texttospeech.SynthesisInput(text=text)
     voice = texttospeech.VoiceSelectionParams(
@@ -117,7 +109,8 @@ def voice():
         input="speech",
         action="/voice",
         method="POST",
-        timeout=5
+        timeout=6,
+        speech_timeout="auto"
     )
     gather.play("https://pizzabotvoice.onrender.com/static/reply.mp3")
 
