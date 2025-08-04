@@ -61,8 +61,8 @@ parse_menu()
 conversation_history = []
 def ask_gpt(user_input):
     if not conversation_history:
-        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. הלקוח יכול לדבר אליך בשפה חופשית ואתה מבין הכל. התפריט הוא:\n" + menu_text})
-        conversation_history.append({"role": "assistant", "content": "שלום! הגעת לפיצה שמש – איך אפשר לעזור לך היום?"})
+        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. התפקיד שלך הוא לקבל הזמנות בטלפון בלבד. אל תציע את התפריט ביוזמתך. תגיב רק למה שהלקוח אומר, ותשאל שאלות רלוונטיות לפי ההקשר. לקוח יכול לדבר בשפה חופשית ואתה תבין הכול. תנהל שיחה נעימה ותסכם הזמנה כולל מחיר.\n\nהתפריט הוא:\n" + menu_text})
+        conversation_history.append({"role": "assistant", "content": "שלום! הגעת לפיצה שמש, מה תרצה להזמין היום?"})
 
     conversation_history.append({"role": "user", "content": user_input})
     chat_completion = client_gpt.chat.completions.create(
