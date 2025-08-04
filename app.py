@@ -7,6 +7,7 @@ import os
 import json
 from dotenv import load_dotenv
 import xml.etree.ElementTree as ET
+import datetime
 
 # טען את משתני הסביבה מהקובץ .env
 load_dotenv()
@@ -59,10 +60,12 @@ parse_menu()
 
 # שיחה עם GPT
 conversation_history = []
+order_summary = ""
 def ask_gpt(user_input):
+    global order_summary
     if not conversation_history:
-        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. התפקיד שלך הוא לקבל הזמנות בטלפון בלבד. אל תציע את התפריט ביוזמתך. תגיב רק למה שהלקוח אומר, ותשאל שאלות רלוונטיות לפי ההקשר. לקוח יכול לדבר בשפה חופשית ואתה תבין הכול. תנהל שיחה נעימה ותסכם הזמנה כולל מחיר.\n\nהתפריט הוא:\n" + menu_text})
-        conversation_history.append({"role": "assistant", "content": "שלום! הגעת לפיצה שמש, מה תרצה להזמין היום?"})
+        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. הלקוח יכול לדבר אליך בשפה חופשית ואתה מבין הכל. התפריט הוא:\n" + menu_text})
+        conversation_history.append({"role": "assistant", "content": "שלום! הגעת לפיצה שמש – איך אפשר לעזור לך היום?"})
 
     conversation_history.append({"role": "user", "content": user_input})
     chat_completion = client_gpt.chat.completions.create(
@@ -71,7 +74,17 @@ def ask_gpt(user_input):
     )
     reply = chat_completion.choices[0].message.content
     conversation_history.append({"role": "assistant", "content": reply})
+
+    if any(x in reply for x in ["סיכום הזמנה", "ההזמנה שלך", "סה""כ", "לאשר"]):
+        order_summary = reply
+        save_order_summary(reply)
+
     return reply
+
+def save_order_summary(summary):
+    now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    with open(f"orders/order_{now}.txt", "w", encoding="utf-8") as f:
+        f.write(summary)
 
 # דיבור
 def synthesize_speech(text):
