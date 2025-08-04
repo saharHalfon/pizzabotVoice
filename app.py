@@ -63,9 +63,12 @@ conversation_history = []
 order_summary = ""
 def ask_gpt(user_input):
     global order_summary
+    if user_input == "התחלה":
+        conversation_history.clear()
+
     if not conversation_history:
-        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. הלקוח יכול לדבר אליך בשפה חופשית ואתה מבין הכל. התפריט הוא:\n" + menu_text})
-        conversation_history.append({"role": "assistant", "content": "שלום! הגעת לפיצה שמש – איך אפשר לעזור לך היום?"})
+        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. אתה פותח את השיחה במשפט 'שלום, הגעת לפיצה שמש – איך אפשר לעזור לך?' וממתין ללקוח. אל תציע מהתפריט מיוזמתך – תמיד רק לפי מה שהלקוח אומר. אתה שואל שלב־שלב: מה סוג הפיצה, איזה תוספות, כמות, שתייה או פסטה אם רלוונטי, ואז מסכם הכל כולל מחיר. אם המשתמש אומר 'פיצה חצי חצי עם זיתים וגבינה' – אתה מבין שמדובר על פיצה אחת, חצי זיתים חצי גבינה. אם הוא אומר '2 משפחתיות' – אתה מבין שמדובר על 2 פיצות נפרדות ושואל כל אחת בנפרד. אם המשתמש שותק – אתה מחכה ולא יוזם בעצמך. התפריט המלא הוא:\n" + menu_text})
+        conversation_history.append({"role": "assistant", "content": "שלום, הגעת לפיצה שמש – איך אפשר לעזור לך?"})
 
     conversation_history.append({"role": "user", "content": user_input})
     chat_completion = client_gpt.chat.completions.create(
@@ -75,7 +78,7 @@ def ask_gpt(user_input):
     reply = chat_completion.choices[0].message.content
     conversation_history.append({"role": "assistant", "content": reply})
 
-    if any(x in reply for x in ["סיכום הזמנה", "ההזמנה שלך", "סה""כ", "לאשר"]):
+    if any(x in reply for x in ["סיכום הזמנה", "ההזמנה שלך", "סה\"כ", "לאשר"]):
         order_summary = reply
         save_order_summary(reply)
 
