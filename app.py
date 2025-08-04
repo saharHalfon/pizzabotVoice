@@ -40,7 +40,7 @@ def parse_menu():
     global menu_text
     tree = ET.parse("menu.xml")
     root = tree.getroot()
-    text = f"תפריט עבור {root.attrib.get('store', '')}:")
+    text = f"תפריט עבור {root.attrib.get('store', '')}:"
     for category in root.findall('category'):
         text += f"\nקטגוריה: {category.attrib['name']}\n"
         for item in category.findall('item'):
