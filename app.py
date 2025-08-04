@@ -2,7 +2,7 @@ from flask import Flask, request
 from twilio.twiml.voice_response import VoiceResponse
 from google.cloud import texttospeech
 from google.oauth2 import service_account
-import openai
+from openai import OpenAI
 import os
 import json
 from dotenv import load_dotenv
@@ -22,10 +22,12 @@ google_creds_dict = json.loads(GOOGLE_CREDS_JSON)
 credentials = service_account.Credentials.from_service_account_info(google_creds_dict)
 client = texttospeech.TextToSpeechClient(credentials=credentials)
 
-# הגדרת OpenAI
-openai.api_key = OPENAI_API_KEY
-openai.organization = OPENAI_ORG_ID
-openai.project = OPENAI_PROJECT_ID
+# הגדרת OpenAI client לפי גרסה 1+
+client_gpt = OpenAI(
+    api_key=OPENAI_API_KEY,
+    organization=OPENAI_ORG_ID,
+    project=OPENAI_PROJECT_ID
+)
 
 app = Flask(__name__)
 
@@ -48,14 +50,14 @@ def parse_menu():
     return text
 
 def ask_gpt(menu_text, user_input):
-    response = openai.ChatCompletion.create(
+    chat_completion = client_gpt.chat.completions.create(
         model="gpt-4o",
         messages=[
             {"role": "system", "content": f"אתה בוט להזמנות טלפוניות של פיצריה. התפריט הוא:\n{menu_text}"},
             {"role": "user", "content": user_input}
         ]
     )
-    return response['choices'][0]['message']['content']
+    return chat_completion.choices[0].message.content
 
 def synthesize_speech(text):
     input_text = texttospeech.SynthesisInput(text=text)
