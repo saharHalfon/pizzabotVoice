@@ -4,6 +4,7 @@ from google.cloud import texttospeech
 from google.oauth2 import service_account
 import openai
 import os
+import json
 from dotenv import load_dotenv
 import xml.etree.ElementTree as ET
 
@@ -14,11 +15,14 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_ORG_ID = os.getenv("OPENAI_ORG_ID")
 OPENAI_PROJECT_ID = os.getenv("OPENAI_PROJECT_ID")
+GOOGLE_CREDS_JSON = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
 
-# הגדרת לקוחות
-credentials = service_account.Credentials.from_service_account_file("creds/tts.json")
+# טען האישורים מהמשתנה
+google_creds_dict = json.loads(GOOGLE_CREDS_JSON)
+credentials = service_account.Credentials.from_service_account_info(google_creds_dict)
 client = texttospeech.TextToSpeechClient(credentials=credentials)
 
+# הגדרת OpenAI
 openai.api_key = OPENAI_API_KEY
 openai.organization = OPENAI_ORG_ID
 openai.project = OPENAI_PROJECT_ID
