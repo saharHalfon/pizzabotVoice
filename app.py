@@ -1,7 +1,7 @@
 from flask import Flask, request
 from twilio.twiml.voice_response import VoiceResponse
 from google.cloud import texttospeech
-from google.api_core.client_options import ClientOptions
+from google.oauth2 import service_account
 import openai
 import os
 from dotenv import load_dotenv
@@ -11,19 +11,19 @@ import xml.etree.ElementTree as ET
 load_dotenv()
 
 # הגדרת מפתחות מהסביבה
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_ORG_ID = os.getenv("OPENAI_ORG_ID")
 OPENAI_PROJECT_ID = os.getenv("OPENAI_PROJECT_ID")
 
 # הגדרת לקוחות
-client = texttospeech.TextToSpeechClient(client_options=ClientOptions(api_key=GOOGLE_API_KEY))
+credentials = service_account.Credentials.from_service_account_file("creds/tts.json")
+client = texttospeech.TextToSpeechClient(credentials=credentials)
+
 openai.api_key = OPENAI_API_KEY
 openai.organization = OPENAI_ORG_ID
 openai.project = OPENAI_PROJECT_ID
 
 app = Flask(__name__)
-
 
 def parse_menu():
     tree = ET.parse("menu.xml")
