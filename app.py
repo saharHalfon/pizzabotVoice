@@ -87,12 +87,24 @@ def synthesize_speech(text):
 
 @app.route("/voice", methods=['POST'])
 def voice():
-    user_input = request.form.get("SpeechResult") or "שלום"
-    gpt_reply = ask_gpt(user_input)
-    synthesize_speech(gpt_reply)
+    user_input = request.form.get("SpeechResult")
+
+    if user_input:
+        gpt_reply = ask_gpt(user_input)
+        synthesize_speech(gpt_reply)
+    else:
+        gpt_reply = ask_gpt("התחלה")
+        synthesize_speech(gpt_reply)
 
     twilio_response = VoiceResponse()
-    twilio_response.play("https://pizzabotvoice.onrender.com/static/reply.mp3")
+    gather = twilio_response.gather(
+        input="speech",
+        action="/voice",
+        method="POST",
+        timeout=5
+    )
+    gather.play("https://pizzabotvoice.onrender.com/static/reply.mp3")
+
     return str(twilio_response)
 
 @app.route("/")
