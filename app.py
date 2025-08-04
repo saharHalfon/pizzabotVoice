@@ -31,10 +31,16 @@ client_gpt = OpenAI(
 
 app = Flask(__name__)
 
+# אחסון מצב שיחה לפי session ID (לשימוש עתידי)
+user_states = {}
+
+# תפריט
+menu_text = ""
 def parse_menu():
+    global menu_text
     tree = ET.parse("menu.xml")
     root = tree.getroot()
-    text = f"תפריט עבור {root.attrib.get('store', '')}:\n"
+    text = f"תפריט עבור {root.attrib.get('store', '')}:")
     for category in root.findall('category'):
         text += f"\nקטגוריה: {category.attrib['name']}\n"
         for item in category.findall('item'):
@@ -47,18 +53,27 @@ def parse_menu():
                     ename = extra.attrib['name']
                     eprice = extra.attrib['price']
                     text += f"    תוספת: {ename} – {eprice} ₪\n"
-    return text
+    menu_text = text
 
-def ask_gpt(menu_text, user_input):
+parse_menu()
+
+# שיחה עם GPT
+conversation_history = []
+def ask_gpt(user_input):
+    if not conversation_history:
+        conversation_history.append({"role": "system", "content": "אתה בוט להזמנות טלפוניות של פיצריה בשם פיצה שמש. אתה תמיד פונה בצורה אדיבה ומקצועית כאילו אתה נציג שירות אמיתי, ומנהל שיחה טבעית שלב אחר שלב. הלקוח יכול לדבר אליך בשפה חופשית ואתה מבין הכל. התפריט הוא:\n" + menu_text})
+        conversation_history.append({"role": "assistant", "content": "שלום! הגעת לפיצה שמש – איך אפשר לעזור לך היום?"})
+
+    conversation_history.append({"role": "user", "content": user_input})
     chat_completion = client_gpt.chat.completions.create(
         model="gpt-4o",
-        messages=[
-            {"role": "system", "content": f"אתה בוט להזמנות טלפוניות של פיצריה. התפריט הוא:\n{menu_text}"},
-            {"role": "user", "content": user_input}
-        ]
+        messages=conversation_history
     )
-    return chat_completion.choices[0].message.content
+    reply = chat_completion.choices[0].message.content
+    conversation_history.append({"role": "assistant", "content": reply})
+    return reply
 
+# דיבור
 def synthesize_speech(text):
     input_text = texttospeech.SynthesisInput(text=text)
     voice = texttospeech.VoiceSelectionParams(
@@ -72,9 +87,8 @@ def synthesize_speech(text):
 
 @app.route("/voice", methods=['POST'])
 def voice():
-    user_input = "אני רוצה פיצה משפחתית עם תוספת פטריות"
-    menu_text = parse_menu()
-    gpt_reply = ask_gpt(menu_text, user_input)
+    user_input = request.form.get("SpeechResult") or "שלום"
+    gpt_reply = ask_gpt(user_input)
     synthesize_speech(gpt_reply)
 
     twilio_response = VoiceResponse()
