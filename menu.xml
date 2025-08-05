@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<menu store="Pizza Shemesh – אשקלון">
+<menu store="Pizza Shemesh">
   <category name="פיצות">
     <item id="pizza_family">
       <name>פיצה משפחתית</name>
@@ -20,12 +20,6 @@
         <extra name="בטטה" price="10"/>
         <extra name="פטריות טריות" price="10"/>
       </extras>
-      <sauces>
-        <sauce name="רוטב הבית" price="2"/>
-        <sauce name="אלף האיים" price="2"/>
-        <sauce name="חריף" price="2"/>
-        <sauce name="שום" price="2"/>
-      </sauces>
     </item>
 	<item id="pizza_sauces">
       <name>תוספות</name>
@@ -40,52 +34,61 @@
     <item id="pizza_greek">
       <name>פיצה יוונית</name>
       <price>40</price>
-      <extras>
-        <extra name="תוספת רגילה" price="8"/>
-        <extra name="תוספת ספיישל" price="8"/>
-      </extras>
     </item>
     <item id="pizza_spicy">
       <name>פיצה חריפה</name>
       <price>40</price>
-      <extras>
-        <extra name="תוספת רגילה" price="8"/>
-        <extra name="תוספת ספיישל" price="8"/>
-      </extras>
     </item>
     <item id="pizza_vegan">
       <name>פיצה טבעונית</name>
       <price>37</price>
-      <extras>
-        <extra name="תוספת רגילה" price="8"/>
-      </extras>
     </item>
     <item id="pizza_alfredo">
       <name>פיצה אלפרדו</name>
       <price>37</price>
-      <extras>
-        <extra name="תוספת רגילה" price="8"/>
-      </extras>
     </item>
     <item id="pizza_glutenfree">
       <name>פיצה ללא גלוטן (אישי)</name>
       <price>37</price>
-      <extras>
-        <extra name="תוספת רגילה" price="8"/>
-      </extras>
     </item>
     <item id="pizza_personal">
       <name>פיצה אישית</name>
       <price>20</price>
       <extras>
-        <extra name="תוספת בסיסית" price="6"/>
+        <extra name="גבינה צהובה" price="8"/>
+        <extra name="בולגרית" price="8"/>
+        <extra name="זיתים ירוקים" price="8"/>
+        <extra name="זיתים שחורים" price="8"/>
+        <extra name="עגבניות" price="8"/>
+        <extra name="בצל" price="8"/>
+        <extra name="פטריות" price="8"/>
+        <extra name="תירס" price="8"/>
+        <extra name="פלפל חריף" price="8"/>
+        <extra name="טונה" price="8"/>
+        <extra name="חציל" price="10"/>
+        <extra name="אננס" price="10"/>
+        <extra name="בטטה" price="10"/>
+        <extra name="פטריות טריות" price="10"/>
       </extras>
     </item>
     <item id="pizza_special_pro">
       <name>פיצה פרו (עדשים, אישי)</name>
       <price>40</price>
-      <extras>
-        <extra name="תוספת" price="5"/>
+       <extras>
+        <extra name="גבינה צהובה" price="8"/>
+        <extra name="בולגרית" price="8"/>
+        <extra name="זיתים ירוקים" price="8"/>
+        <extra name="זיתים שחורים" price="8"/>
+        <extra name="עגבניות" price="8"/>
+        <extra name="בצל" price="8"/>
+        <extra name="פטריות" price="8"/>
+        <extra name="תירס" price="8"/>
+        <extra name="פלפל חריף" price="8"/>
+        <extra name="טונה" price="8"/>
+        <extra name="חציל" price="10"/>
+        <extra name="אננס" price="10"/>
+        <extra name="בטטה" price="10"/>
+        <extra name="פטריות טריות" price="10"/>
       </extras>
     </item>
     <item id="dessert_pizza_chocolate">
