@@ -78,15 +78,18 @@ MENU = load_menu_from_xml("menu.xml")
 
 def build_menu_summary(menu: dict) -> str:
     lines = ["אל תשתמש בשום ידע חיצוני. רק מתוך הרשימה הזו."]
-    lines.append("\nפריטים מותרים:")
+    lines.append("
+פריטים מותרים:")
     for name in menu["items"]:
         price = menu["prices"].get(name, 0)
         lines.append(f"- {name} — {price} ₪")
         if name in menu["extras_map"]:
             ex = ", ".join([f"{en}({int(ep)}₪)" for en, ep in menu["extras_map"][name]])
             lines.append(f"  תוספות: {ex}")
-    lines.append("\nרק שלושת הפריטים הבאים מקבלים תוספות: פיצה משפחתית, פיצה אישית, פיצה ללא גלוטן (אישי).")
-    return "\n".join(lines)
+    lines.append("
+רק שלושת הפריטים הבאים מקבלים תוספות: פיצה משפחתית, פיצה אישית, פיצה ללא גלוטן (אישי).")
+    return "
+".join(lines)
 
 MENU_SUMMARY = build_menu_summary(MENU)
 
@@ -115,13 +118,12 @@ def gpt_parse(user_text: str) -> dict:
     """
     system = (
         "אתה מסייע בקבלת הזמנה טלפונית לפיצה שמש. החזר אך ורק JSON תקני. "
-        "אל תמציא פריטים/תוספות שלא קיימים. אם משהו לא חוקי – התעלם ממנו." 
+        "אל תמציא פריטים/תוספות שלא קיימים. אם משהו לא חוקי – התעלם ממנו."
     )
+
     user = f"""
 הטקסט של הלקוח:
-"""
 {user_text}
-"""
 
 עבוד לפי התפריט הבא בלבד:
 {MENU_SUMMARY}
@@ -141,6 +143,7 @@ def gpt_parse(user_text: str) -> dict:
 - אם יש עמימות כמו "זיתים" כשיש סוגים שונים – אל תכריע; אל תוסיף extras.
 - אל תכתוב שום טקסט מחוץ ל-JSON.
 """
+
     resp = client_gpt.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -167,6 +170,32 @@ def match_extra_ambiguity(keyword: str, legal_extras: list) -> list:
         if k in en:
             options.append(en)
     return options
+
+
+def apply_extra_disambiguation(sess, user_text: str) -> bool:
+    """כשיש הבהרה ממתינה (למשל זיתים ירוקים/שחורים), נקבע את התשובה ונמשיך."""
+    if not sess.get("clarify"):
+        return False
+    c = sess["clarify"]
+    idx = c["for_index"]
+    text = (user_text or "").strip().lower()
+    chosen = None
+    for opt in c.get("options", []):
+        lo = opt.lower()
+        # מילות מפתח שיעזרו בבחירה
+        tokens = ["ירוקים", "שחורים", "טריות", "רגילות"]
+        if any(tok in text for tok in tokens) and any(tok in lo for tok in tokens):
+            chosen = opt
+            break
+        if lo in text:
+            chosen = opt
+            break
+    if chosen:
+        sess["order"][idx]["extras"].append(chosen)
+        sess["order"][idx]["extras_done"] = True
+        sess["clarify"] = None
+        return True
+    return False
 
 
 def interpret_extras_for_item_from_text(user_text: str, item_name: str):
@@ -199,10 +228,8 @@ def interpret_extras_for_item_from_text(user_text: str, item_name: str):
             elif len(opts) == 1:
                 chosen.append(opts[0])
 
-    # חצי/חצי – מבחינת חיוב זה שתי תוספות
-    if "חצי" in text and len(chosen) >= 2:
-        # אין צורך בסימון מיוחד – שתי התוספות כבר נספרות
-        pass
+    # חצי/חצי – מבחינת חיוב זה שתי תוספות (כבר נספרות)
+    # אין צורך בסימון מיוחד בקוד
 
     done = bool(chosen) and clarify is None
     return chosen, done, clarify
@@ -369,8 +396,7 @@ def voice():
         # 1) הבהרת תוספת אם ממתינה
         if user_text and sess.get("clarify"):
             if apply_extra_disambiguation(sess, user_text):
-                # ממשיכים לזרימה
-                pass
+                pass  # ההבהרה טופלה
 
         # 2) פענוח חופשי עם GPT בכל תשובה
         if user_text:
@@ -442,7 +468,3 @@ def index():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
-    
-    
-    
