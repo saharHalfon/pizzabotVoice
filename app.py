@@ -78,18 +78,17 @@ MENU = load_menu_from_xml("menu.xml")
 
 def build_menu_summary(menu: dict) -> str:
     lines = ["אל תשתמש בשום ידע חיצוני. רק מתוך הרשימה הזו."]
-    lines.append("
-פריטים מותרים:")
+    # FIX: the original had an illegal newline string literal here
+    lines.append("\nפריטים מותרים:")
     for name in menu["items"]:
         price = menu["prices"].get(name, 0)
         lines.append(f"- {name} — {price} ₪")
         if name in menu["extras_map"]:
             ex = ", ".join([f"{en}({int(ep)}₪)" for en, ep in menu["extras_map"][name]])
             lines.append(f"  תוספות: {ex}")
-    lines.append("
-רק שלושת הפריטים הבאים מקבלים תוספות: פיצה משפחתית, פיצה אישית, פיצה ללא גלוטן (אישי).")
-    return "
-".join(lines)
+    # FIX: the original had an illegal string literal and wrong join token
+    lines.append("\nרק שלושת הפריטים הבאים מקבלים תוספות: פיצה משפחתית, פיצה אישית, פיצה ללא גלוטן (אישי).")
+    return "\n".join(lines)
 
 MENU_SUMMARY = build_menu_summary(MENU)
 
